@@ -82,3 +82,11 @@ Days with more than 1% of errors:
     for i in range(0, len(result), 1):
         print str(result[i][0]) + ' - ' + str(result[i][1]) + '% errors'
 
+
+if __name__ == '__main__':
+    popular_article()
+    popular_authors()
+    log_status()
+    print '''
+Success!
+'''
