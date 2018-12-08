@@ -27,7 +27,7 @@ def popular_article():
     """
     c.execute(query)
     result = c.fetchall()
-    db.clode()
+    db.close()
     print '''
 Popular Articles:
 '''
