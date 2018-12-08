@@ -57,3 +57,28 @@ Popular Authors:
     for i in range(0, len(result), 1):
         print '"' + result[i][0] + '" - ' + str(result[i][1]) + ' views'
 
+
+def log_status():
+    '''print the days have more than 1% of requests lead to errors'''
+
+    (db, c) = connect()
+    query = \
+        """
+select * from (select a.date, round(cast((b.hit_error * 100) as numeric) /
+cast(a.total_views as numeric), 2) as error_rate
+from ((select cast(time as date) as date,
+count(*) as total_views from log group by 1) as a
+join (select cast(time as date) as date, count(*) as hit_error from
+log where status not like '%200%' group by 1) as b
+on a.date = b.date)) as t
+where error_rate > 1;
+"""
+    c.execute(query)
+    result = c.fetchall()
+    db.close()
+    print '''
+Days with more than 1% of errors:
+'''
+    for i in range(0, len(result), 1):
+        print str(result[i][0]) + ' - ' + str(result[i][1]) + '% errors'
+
