@@ -33,3 +33,27 @@ Popular Articles:
 '''
     for i in range(0, len(result), 1):
         print '"' + result[i][0] + '" - ' + str(result[i][1]) + ' views'
+
+
+def popular_authors():
+    '''print the most popular article authors of all time'''
+
+    (db, c) = connect()
+    query = \
+        """select authors.name, count(log.path) as views from log
+    join articles
+    on log.path = concat('/article/', articles.slug)
+    join authors
+    on authors.id = articles.author
+    group by authors.name
+    order by views desc
+    """
+    c.execute(query)
+    result = c.fetchall()
+    db.close()
+    print '''
+Popular Authors:
+'''
+    for i in range(0, len(result), 1):
+        print '"' + result[i][0] + '" - ' + str(result[i][1]) + ' views'
+
